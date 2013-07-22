@@ -103,15 +103,18 @@ module APISmith
       def request!(method, path, options, *param_types)
         # Merge in the default request options, e.g. those to be passed to HTTParty raw
         request_options = merged_options_for(:request, options)
-        # Exapdn the path out into a full version when the endpoint is present.
+        # Expand the path out into a full version when the endpoint is present.
         full_path = request_options[:skip_endpoint] ? path : path_for(path)
         # For each of the given param_types (e.g. :query, :body) will automatically
         # merge in the options for the current request.
         param_types.each do |type|
           request_options[type] = merged_options_for(type, options)
         end
-        # Finally, use HTTParty to get the response
+        # Finally, use HTTParty to get the response, optionally signing the request
         response = instrument_request method, full_path, options do
+          if self.respond_to? :sign_request
+            self.sign_request request_options
+          end
           self.class.send method, full_path, request_options
         end
         # Pre-process the response to check for errors.
