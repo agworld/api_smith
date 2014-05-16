@@ -153,6 +153,7 @@ module APISmith
       # @param [Hash] options the hash to check for the `:extra_{type}` option.
       # @return [Hash] a hash of the merged options.
       def merged_options_for(type, options)
+        return options[:"override_#{type}"] if options.has_key?(:"override_#{type}")
         base = send :"base_#{type}_options"
         base.merge!(send(:"#{type}_options") || {})
         base.merge! options.fetch(:"extra_#{type}", {})
