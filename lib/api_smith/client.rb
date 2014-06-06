@@ -113,7 +113,7 @@ module APISmith
         # Finally, use HTTParty to get the response, optionally signing the request
         response = instrument_request method, full_path, options do
           if self.respond_to? :sign_request
-            self.sign_request full_path, request_options
+            request_options = self.sign_request full_path, request_options, method
           end
           self.class.send method, full_path, request_options
         end
