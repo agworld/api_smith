@@ -2,7 +2,7 @@ source "https://rubygems.org/"
 
 gemspec
 
-gem 'hashie', ENV.fetch('HASHIE_VERSION', '~> 1.0')
+gem 'hashie'
 gem 'json'
 
 group :development do
